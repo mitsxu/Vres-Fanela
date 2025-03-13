@@ -139,7 +139,7 @@ class StockCheckerApp:
         except Exception as e:
             print(f"⚠️ Σφάλμα κατά την αποστολή email: {e}")
     
-    def send_slack(self, size)
+    def send_slack(self, size):
         try:
             message = f"Η φανέλα σε μέγεθος {size} είναι πλέον διαθέσιμη! Δες την εδώ: https://www.redstore.gr/el/emfaniseis-2/entos/andrika/andriko-fanela-epeteiaki-100-chronia-mn_136330/"
 
