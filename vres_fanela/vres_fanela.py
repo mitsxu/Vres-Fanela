@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from playsound import playsound
+from slack_sdk import WebClient
 import threading
 import pygame
 
@@ -19,8 +20,11 @@ SMTP_PORT = 587
 EMAIL_SENDER = ""  
 EMAIL_PASSWORD = ""  
 
+# --- Ρυθμίσεις slack ---
+SLACK_TOKEN = ""
+
 # --- Λίστα μεγεθών ---
-SIZES = ["LARGE", "MEDIUM", "SMALL", "XLARGE", "XXLARGE", "XXXLARGE"]
+SIZES = ["LARGE", "MEDIUM","XLARGE"]
 
 class StockCheckerApp:
     def __init__(self, root):
@@ -101,6 +105,7 @@ class StockCheckerApp:
                 if size_status[selected_size]:
                     self.result_label.config(text=f"✅ {selected_size} διαθέσιμο!", fg="green")
                     self.play_sound()  # 🔊 Καλούμε τη μέθοδο σωστά
+                    self.send_slack(self, selected_size)
                     if email:
                         self.send_email(email, selected_size)
                     self.running = False  # Σταματάει ο έλεγχος
@@ -133,6 +138,22 @@ class StockCheckerApp:
         
         except Exception as e:
             print(f"⚠️ Σφάλμα κατά την αποστολή email: {e}")
+    
+    def send_slack(self, size)
+        try:
+            message = f"Η φανέλα σε μέγεθος {size} είναι πλέον διαθέσιμη! Δες την εδώ: https://www.redstore.gr/el/emfaniseis-2/entos/andrika/andriko-fanela-epeteiaki-100-chronia-mn_136330/"
+
+            # Set up a WebClient with the Slack OAuth token
+            client = WebClient(token=SLACK_TOKEN)
+
+            # Send a message
+            client.chat_postMessage(
+                channel="bot-updates", 
+                text=message, 
+                username="Bot Redstore"
+            )
+        except Exception as e:
+            print(f"⚠️ Σφάλμα κατά την αποστολή slack: {e}")
 
 
 if __name__ == "__main__":
