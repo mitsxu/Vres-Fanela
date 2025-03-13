@@ -16,99 +16,11 @@ import pygame
 # --- Ρυθμίσεις email ---
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-EMAIL_SENDER = "vresfanela@gmail.com"  
-EMAIL_PASSWORD = "gphrsakkalrxcyhk"  
+EMAIL_SENDER = ""  
+EMAIL_PASSWORD = ""  
 
 # --- Λίστα μεγεθών ---
 SIZES = ["LARGE", "MEDIUM", "SMALL", "XLARGE", "XXLARGE", "XXXLARGE"]
-
-# class StockCheckerApp:
-#     def __init__(self, root):
-#         self.root = root
-#         self.root.title("Vres Fanela")
-#         self.root.geometry("300x300")
-
-#         try:
-#             self.root.iconphoto(False, tk.PhotoImage(file="logo.png"))
-#         except:
-#             print("⚠️ Δεν βρέθηκε εικόνα εικονιδίου.")
-
-#         tk.Label(root, text="Επιλέξτε Μέγεθος:").pack(pady=5)
-#         self.size_var = tk.StringVar(value="SMALL")
-#         self.size_menu = tk.OptionMenu(root, self.size_var, *SIZES)
-#         self.size_menu.pack()
-
-#         tk.Label(root, text="Email (προαιρετικά):").pack(pady=5)
-#         self.email_entry = tk.Entry(root, width=30)
-#         self.email_entry.pack()
-
-#         self.start_button = tk.Button(root, text="Έναρξη Ελέγχου", command=self.start_check)
-#         self.start_button.pack(pady=5)
-
-#         self.stop_button = tk.Button(root, text="Διακοπή Ελέγχου", command=self.stop_check, state=tk.DISABLED)
-#         self.stop_button.pack(pady=5)
-
-#         self.result_label = tk.Label(root, text="Αναμονή για έλεγχο...")
-#         self.result_label.pack()
-
-#         self.running = False
-    
-
-#     def start_check(self):
-#         self.running = True
-#         self.start_button.config(state=tk.DISABLED)
-#         self.stop_button.config(state=tk.NORMAL)
-#         selected_size = self.size_var.get()
-#         email = self.email_entry.get()
-
-#         messagebox.showinfo("Ενημέρωση", f"Ξεκινάει ο έλεγχος για {selected_size}...")
-#         threading.Thread(target=self.check_availability, args=(selected_size, email), daemon=True).start()
-
-#     def stop_check(self):
-#         self.running = False
-#         self.start_button.config(state=tk.NORMAL)
-#         self.stop_button.config(state=tk.DISABLED)
-#         self.result_label.config(text="Ο έλεγχος διακόπηκε.", fg="blue")
-
-#     def check_availability(self, selected_size, email):
-#         while self.running:
-#             options = webdriver.ChromeOptions()
-#             options.add_argument("--window-size=1920,1080")
-#             options.add_argument("--disable-gpu")
-            
-#             driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-#             #driver.get("https://www.redstore.gr/el/emfaniseis-2/entos/andrika/andriko-fanela-epeteiaki-100-chronia-mn_136330/")
-#             driver.get("https://www.redstore.gr/el/emfaniseis-2/triti/andrika/andriko-fanela-triti-24-25_136029/")
-            
-#             try:
-#                 WebDriverWait(driver, 10).until(
-#                     EC.presence_of_element_located((By.XPATH, "//select[contains(@class, 'dim-select')]"))
-#                 )
-
-#                 size_elements = driver.find_elements(By.XPATH, "//select[contains(@class, 'dim-select')]//option")
-#                 sizes = size_elements[1:]  # Αγνοούμε το "Μέγεθος"
-
-#                 size_status = {SIZES[i]: sizes[i].get_attribute("disabled") is None for i in range(len(SIZES))}
-
-#                 if size_status[selected_size]:
-#                     self.result_label.config(text=f"✅ {selected_size} διαθέσιμο!", fg="green")
-#                     #playsound("notification.mp3")  
-#                     play_sound()
-#                     if email:
-#                         self.send_email(email, selected_size)
-#                     self.running = False  # Σταματάει ο έλεγχος μετά την εύρεση
-#                     self.start_button.config(state=tk.NORMAL)
-#                     self.stop_button.config(state=tk.DISABLED)
-#                 else:
-#                     self.result_label.config(text=f"❌ {selected_size} Sold Out", fg="red")
-
-#             except Exception as e:
-#                 self.result_label.config(text=f"⚠️ Σφάλμα: {e}", fg="orange")
-
-#             driver.quit()
-#             time.sleep(15)  # Έλεγχος κάθε 15 δευτερόλεπτα
-
-    
 
 class StockCheckerApp:
     def __init__(self, root):
@@ -174,7 +86,7 @@ class StockCheckerApp:
             options.add_argument("--disable-gpu")
             
             driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-            driver.get("https://www.redstore.gr/el/emfaniseis-2/triti/andrika/andriko-fanela-triti-24-25_136029/")
+            driver.get("https://www.redstore.gr/el/emfaniseis-2/entos/andrika/andriko-fanela-epeteiaki-100-chronia-mn_136330/")
 
             try:
                 WebDriverWait(driver, 10).until(
@@ -201,7 +113,7 @@ class StockCheckerApp:
                 self.result_label.config(text=f"⚠️ Σφάλμα: {e}", fg="orange")
 
             driver.quit()
-            time.sleep(15)  # Έλεγχος κάθε 15 δευτερόλεπτα
+            time.sleep(60)  # Έλεγχος κάθε 60 δευτερόλεπτα
 
     def send_email(self, to_email, size):
         try:
